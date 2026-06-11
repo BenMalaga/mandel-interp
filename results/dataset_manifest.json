@@ -1,0 +1,36 @@
+{
+  "seed": 20260611,
+  "window": {
+    "re": [
+      -2.5,
+      1.0
+    ],
+    "im": [
+      -1.5,
+      1.5
+    ]
+  },
+  "n_total": 600,
+  "boundary_frac": 0.35,
+  "max_iter": 2000,
+  "splits": {
+    "train": {
+      "n": 480,
+      "n_escaped": 336,
+      "n_interior": 144,
+      "sha16": "8a327f37126159f2"
+    },
+    "val": {
+      "n": 60,
+      "n_escaped": 42,
+      "n_interior": 18,
+      "sha16": "931e168579b25ea8"
+    },
+    "test": {
+      "n": 60,
+      "n_escaped": 51,
+      "n_interior": 9,
+      "sha16": "9f90921f59cfc763"
+    }
+  }
+}
