@@ -14,7 +14,7 @@ This is a mechanistic-interpretability study (linear probes, causal ablations, g
 training-dynamics measures) on a continuous *holomorphic-dynamics* task — a setting the
 interpretability literature has only studied on discrete algebraic and board-game tasks.
 
-- **Status:** scaffolded; pre-registration in progress. No network has been trained yet.
+- **Status:** pre-registration locked (2026-06-11); generator validated. No network trained yet.
 - **Hypotheses, method, and prior art:** see [`PRE_REGISTRATION.md`](PRE_REGISTRATION.md).
 - **Compute:** laptop-scale (tiny networks, CPU/MPS). Data is generated, not downloaded.
 - **Deliverables:** the training + probing harness, an interpretability-ready labeled dataset
