@@ -81,3 +81,14 @@ Nanda et al. "Progress measures for grokking" (ICLR 2023); Power et al. 2022; Zh
 
 ## 8. Deviations
 None at lock. Amendments appear below this line, dated and labeled, never edited in place.
+
+**AMENDMENT 1 (2026-06-11, pre-training — clarification, no outcome data seen).** §3's
+architecture clause is ambiguous between MLP realizations: "4 hidden layers × width 256" with
+a separate input projection gives 266,506 params; folding the input layer into the four gives
+200,714; five weight matrices of width 256 give 332,298. No width-256 4-hidden-layer
+realization hits "≈3.0×10⁵" within 10%. We freeze the realization closest to the registered
+count: Linear(2→256) input projection + 4× Linear(256→256) GELU hidden layers + Linear(256→10)
+head = **266,506 params** (11.2% under the rounded 3.0×10⁵), as implemented in `src/train.py`
+and pinned exactly by `tests/test_train.py`. Additionally, §3 fixed the early-stop *metric*
+(val loss) but not the patience; we freeze **patience = 20 epochs**, logged in every run
+config. Both choices are made before any training run; H1–H3 thresholds are unchanged.
