@@ -1,3 +1,4 @@
-# Pinned at pre-positioning (Python 3.14, macOS arm64). Torch added at training activation.
+# Pinned (Python 3.14, macOS arm64). Torch added with the training/probing harness.
 numpy==2.4.6
 pytest==9.0.3
+torch==2.12.0
