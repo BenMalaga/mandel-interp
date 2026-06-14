@@ -4,8 +4,8 @@
 
 A small MLP is trained to classify points of the Mandelbrot set by the *period* of the
 hyperbolic component they fall in. Then we open the network up and ask a sharp question:
-did it rediscover the real mathematics of the problem — the multiplier map |λ| that working
-mathematicians use as each component's natural internal coordinate — or did it just memorize
+did it rediscover the real mathematics of the problem, the multiplier map |λ| that working
+mathematicians use as each component's natural internal coordinate, or did it just memorize
 a lookup table of which side of the boundary each point is on?
 
 ---
@@ -18,18 +18,18 @@ interior cycle has, and the precise value of a hidden coordinate called the **mu
 modulus |λ|** that runs from 0 at a component's center to 1 at its boundary.
 
 That exactness is the whole point. Most interpretability research has to guess at what a
-network "should" represent. Here the ground truth is a theorem, not a hunch — so when we look
+network "should" represent. Here the ground truth is a theorem, not a hunch, so when we look
 inside a trained net and ask "is |λ| in here?", we can give a clean, causal answer. The result
 is interesting either way:
 
 - **If the network builds |λ|**, a tiny net rediscovered a piece of complex-dynamics theory
-  from nothing but coordinates and labels — a concrete "world model" on a continuous task.
+  from nothing but coordinates and labels: a concrete "world model" on a continuous task.
 - **If it doesn't**, we have a crisp, publishable account of what small networks learn
   *instead* (a boundary-memorizer) and why.
 
 ![Two-panel render of the Mandelbrot set: left, interior components colored by period; right, multiplier modulus inside and escape-time shading outside](docs/figures/mandelbrot_label_structure.png)
 
-*The ground-truth structure a tiny network is trained to classify — we then probe whether it
+*The ground-truth structure a tiny network is trained to classify, then we probe whether it
 rediscovers |λ| internally. **Left:** interior hyperbolic components colored by the period of
 their attracting cycle (these are the class labels). **Right:** the multiplier modulus |λ|
 inside each component (dark center → bright boundary) with smooth escape-time shading outside.
@@ -42,13 +42,13 @@ Both panels are computed exactly from the dynamics, not from any model.*
 - **Exact labels, no dataset to download.** A small, validated dynamics core
   (`src/dynamics.py`) computes period, |λ| (via Newton-refined cycles), and the escape-side
   Green's function G(c) for any point. Labels are generated deterministically from a fixed seed.
-- **A deliberately plain network.** The MLP sees only the raw coordinates `(Re c, Im c)` — no
-  Fourier features, no hand-engineered inputs — so any structure it represents it had to
+- **A deliberately plain network.** The MLP sees only the raw coordinates `(Re c, Im c)`, with
+  no Fourier features and no hand-engineered inputs, so any structure it represents it had to
   *build* itself. The architecture is frozen in the pre-registration.
 - **Linear and nonlinear probes.** We fit probes for |λ|, G(c), and a control coordinate on
   every hidden layer, and measure held-out R².
 - **Probe-power controls.** The same probes are run on an *untrained* net and on a net trained
-  on *shuffled* labels. A representation claim only counts if the trained net beats both — this
+  on *shuffled* labels. A representation claim only counts if the trained net beats both, which
   rules out "a probe can fit anything from rich-enough features."
 - **Causal tests, not just correlations.** We ablate the top probe directions and patch
   activations between points at different |λ|, and check whether the network's predictions
@@ -76,23 +76,57 @@ Both panels are computed exactly from the dynamics, not from any model.*
 ## Status
 
 Pre-registration locked (2026-06-11); the dynamics core and the training/probing/ablation
-harness are built and tested. **No network has been trained yet** — the figure above is exact
+harness are built and tested. **No network has been trained yet**; the figure above is exact
 ground-truth structure, not a model output. Training and the interpretability analysis run next.
 
 ---
 
-## Reproduce / links
+## Reproduce
+
+One path, four stages. Stages 0 and 1 are CPU-only and run in seconds to minutes. Stages 2
+and 3 are the gated research run (the full 2M-point dataset and the 5-seed training/probing
+sweep); they are deliberately NOT triggered by importing any module and must be invoked
+explicitly.
 
 ```bash
+# stage 0: environment + the showpiece figure (CPU, seconds; reproduces byte-for-byte)
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
+python -m src.figures.showpiece                  # -> docs/figures/mandelbrot_label_structure.png
 
-# regenerate the figure above (exact dynamics; renders in seconds)
-python -m src.figures.showpiece
+# stage 0b: validate the dynamics core against known-math points (CPU, seconds)
+python -m pytest -q                              # 35 contract + ground-truth tests
+
+# stage 1: sanity-check the whole pipeline on a tiny slice (CPU, ~1 min; deletes its own
+#          artifacts and records NO outcome numbers, plumbing only, not a research run)
+python -m src.smoke_test
+
+# stage 2: GATED: generate the pre-registered dataset (CPU-heavy; ~2M points x up to 50k
+#           iterations; writes gitignored arrays under data/ + a manifest to results/)
+python -m src.build_dataset --n 2000000 --boundary-frac 0.35 --max-iter 50000
+#   (quick check first: python -m src.build_dataset --smoke   # 600 points)
+
+# stage 3: GATED: the 5-seed training + probing + ablation sweep (PyTorch CPU/MPS)
+python -m src.train     --data-dir data --out-dir checkpoints                       # seeds 0..4
+python -m src.train     --data-dir data --out-dir checkpoints --shuffle-labels       # probe-power control
+python -m src.probes    --checkpoint checkpoints/seed0/best.pt --data-dir data --out results/probes_seed0.json
+python -m src.probes    --untrained --seed 0 --data-dir data --out results/probes_seed0_untrained.json
+python -m src.ablations --checkpoint checkpoints/seed0/best.pt --data-dir data --out results/ablations_seed0.json
 ```
 
-- **Pre-registration & method:** [`PRE_REGISTRATION.md`](PRE_REGISTRATION.md)
+No dataset to download: every label is computed from the dynamics. The one external file,
+the period-1..32 component centers on Zenodo (record 10.5281/zenodo.15527027, ~560 GB), is a
+*label cross-check only* and is **not** required to reproduce; `src/probes.py` recomputes the
+period-1..8 centers it needs independently by Newton's method.
+
+## Links
+
+- **Pre-registration & method (locked, timestamped):** [`PRE_REGISTRATION.md`](PRE_REGISTRATION.md)
 - **Dynamics core (exact labels):** [`src/dynamics.py`](src/dynamics.py)
+- **Dataset builder (deterministic, seed 20260611):** [`src/build_dataset.py`](src/build_dataset.py)
+- **Training harness (frozen MLP):** [`src/train.py`](src/train.py)
+- **Probes + controls / causal ablations:** [`src/probes.py`](src/probes.py), [`src/ablations.py`](src/ablations.py)
 - **Figure generator:** [`src/figures/showpiece.py`](src/figures/showpiece.py)
+- **Prior art + how this differs:** [`docs/related_work.md`](docs/related_work.md)
 
 License: code MIT (planned); released dataset CC BY 4.0.

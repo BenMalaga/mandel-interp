@@ -1,4 +1,6 @@
 {
+  "note": "SMOKE / PLUMBING manifest from `python -m src.build_dataset --smoke` (600 points, max_iter 2000), committed to show the generator's on-disk manifest format. This is NOT the pre-registered research dataset. The real run is `python -m src.build_dataset --n 2000000 --boundary-frac 0.35 --max-iter 50000` (PRE_REGISTRATION.md section 2), which overwrites this file with the 2,000,000-point manifest. Raw arrays are gitignored; only this manifest is committed.",
+  "build": "smoke",
   "seed": 20260611,
   "window": {
     "re": [
