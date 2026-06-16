@@ -1,14 +1,12 @@
 # Related work
 
-Living prior-art map for mandel-interp. The project asks a question nobody has asked yet:
-when a small MLP is trained to classify the period of the hyperbolic component containing a
-point c, does it internally represent the multiplier map |lambda(c)| (and the Green's
-function G(c) on the escape side), or only a memorized boundary lookup? The claim is about
-the network, with the ground truth exactly computable. This file tracks the closest existing
-work in three buckets and states, for each, why this project is not derivative.
+This project asks whether a small MLP trained to classify the period of the hyperbolic
+component containing a point c internally represents the multiplier map |lambda(c)| (and the
+Green's function G(c) on the escape side), or only a memorized boundary lookup. The claim is
+about the network's internal representation, with the ground truth exactly computable. This
+section situates the work against the closest prior literature in three areas.
 
-Last refreshed: 2026-06-14. Prior-art also rechecked at pre-registration lock (2026-06-11);
-see PRE_REGISTRATION.md preamble.
+Prior-art surveyed at the 2026-06-11 pre-registration lock and updated 2026-06-14.
 
 ## 1. Learning on Mandelbrot / Julia (the nearest topical neighbor)
 
@@ -71,28 +69,18 @@ map) or an equipotential (the Green's function). That continuous-dynamics target
   with no structure imposed, where any |lambda| representation must be *built by the net* and
   then *discovered* by external probes. (c) Its target is the governing ODE / Julia boundary;
   ours is a specific complex-dynamics internal coordinate (the multiplier modulus) and the
-  escape-side equipotential inside a classifier. The two are complementary, not overlapping;
-  cite it as concurrent related work, not a scoop.
+  escape-side equipotential inside a classifier. The two are complementary rather than
+  overlapping, and we treat it as concurrent related work.
 
-- **General field signal:** mechanistic interpretability was named an MIT Technology Review
-  "10 Breakthrough Technologies of 2026," confirming the method bucket (Section 2) is highly
-  active. No 2026 work was found that probes a Mandelbrot/complex-dynamics-trained classifier
-  for the multiplier map. The specific angle remains unclaimed as of this refresh.
+- **Field context:** mechanistic interpretability was named an MIT Technology Review "10
+  Breakthrough Technologies of 2026," reflecting how active the method area in Section 2 is. A
+  current-literature search found no work that probes a Mandelbrot or complex-dynamics-trained
+  classifier for the multiplier map.
 
-## Verdict (unchanged by the refresh)
+## Summary
 
-The building blocks all exist (fractal classifiers; probe-plus-intervention interpretability;
-interpretable holomorphic-dynamics modeling), which is what keeps this from being a crank
-reinvention. But the specific combination, probing a plain net trained on Mandelbrot period
-labels for the multiplier map / Green's function with pre-registered causal controls, plus the
-released (c, period, |lambda|, G(c), component id) dataset, is still unclaimed. Re-verify again
-before any public release.
-
-## How to refresh this file
-
-Re-run the two prior-art searches (Mandelbrot/Julia learning; probing/world-model
-interpretability on dynamics) on arXiv + Google Scholar, plus a check of
-arxiv.org/list/cs.LG and math.DS for "multiplier map" / "equipotential" + "probe". Add any new
-hit here with a one-line differentiation. Never relax a pre-registered threshold to match a
-competitor; if genuinely scooped, document it honestly (as the portfolio's shelved
-rank-fingerprint project did).
+Fractal classifiers, probe-plus-intervention interpretability, and interpretable
+holomorphic-dynamics modeling each have an established literature. To our knowledge, the
+specific combination studied here, probing a plain network trained on Mandelbrot period labels
+for the multiplier map and Green's function under pre-registered causal controls, together with
+the released (c, period, |lambda|, G(c), component id) dataset, has not appeared in prior work.
