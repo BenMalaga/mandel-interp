@@ -3,7 +3,7 @@
 **Locked:** 2026-06-11 (git commit timestamp is authoritative). No network has been trained
 and no probe/ablation has been run at lock time. The dataset is generated deterministically
 from a fixed seed and contains no model outcomes; locking the analysis plan before any
-*training* is what makes the representation claims (H1–H3) credible rather than post-hoc.
+*training* is what makes the representation claims (H1-H3) credible rather than post-hoc.
 
 Prior-art rechecked 2026-06-11: no published work applies probing/causal interpretability to a
 network trained on Mandelbrot/complex-dynamics labels (closest: arXiv:2509.00903, fractal
@@ -26,7 +26,7 @@ points), which is what enables clean causal interpretability.
 - Sampling region (frozen): c ∈ [-2.5, 1.0] × [-1.5, 1.5]; **target N = 2,000,000**, of which a
   **boundary-enriched stratum (fraction 0.35)** is rejection-sampled toward |λ|≈1 / moderate
   escape time. NumPy PCG64, **seed 20260611**.
-- Classes (10): periods 1–8, "deeper interior" (bounded, period > 8 or unresolved), "escapes".
+- Classes (10): periods 1-8, "deeper interior" (bounded, period > 8 or unresolved), "escapes".
 - Split: 80/10/10 train/val/test by the seeded shuffle. Exact per-class/per-stratum counts and
   per-split SHA are recorded by the (deterministic) generator in
   `results/dataset_manifest.json`; because generation is seeded and outcome-free, these are
@@ -40,7 +40,7 @@ points), which is what enables clean causal interpretability.
 - **Training:** AdamW, lr 1e-3 with cosine decay, weight decay 1e-4, batch 1024, ≤300 epochs
   with early stop on val loss; PyTorch CPU/MPS. **Seeds {0,1,2,3,4}** (all reported).
 - **Sanity gate:** ≥95% accuracy on the OFF-boundary test subset before any interpretability
-  analysis is run; models failing the gate are reported but excluded from H1–H3.
+  analysis is run; models failing the gate are reported but excluded from H1-H3.
 
 ## 4. Probes, controls, ablations (frozen before training)
 - **Probes:** linear and 2-hidden-layer probes predicting |λ(c)| (interior), G(c) (escape), and
@@ -49,7 +49,7 @@ points), which is what enables clean causal interpretability.
 - **Probe-power controls (load-bearing):** identical probes on (a) an UNTRAINED net (same init)
   and (b) a net trained on SHUFFLED labels. A representation claim requires the trained net to
   beat BOTH by the H1 margin (this is what separates "the net encodes |λ|" from "a probe can fit
-  |λ| from any sufficiently rich features"; Hewitt–Liang style).
+  |λ| from any sufficiently rich features"; Hewitt-Liang style).
 - **Causal ablation:** zero- and mean-ablate the top-3 probe directions; compare accuracy drop
   to rank-matched random-direction ablations.
 - **Activation patching:** swap penultimate activations between same-component c-points at
@@ -91,4 +91,4 @@ count: Linear(2→256) input projection + 4× Linear(256→256) GELU hidden laye
 head = **266,506 params** (11.2% under the rounded 3.0×10⁵), as implemented in `src/train.py`
 and pinned exactly by `tests/test_train.py`. Additionally, §3 fixed the early-stop *metric*
 (val loss) but not the patience; we freeze **patience = 20 epochs**, logged in every run
-config. Both choices are made before any training run; H1–H3 thresholds are unchanged.
+config. Both choices are made before any training run; H1-H3 thresholds are unchanged.
