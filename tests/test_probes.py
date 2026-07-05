@@ -126,7 +126,7 @@ def test_target_arrays_masks_keep_domains_clean():
 
 
 def test_run_probes_result_structure(synth_data_dir):
-    """Structure only — values are never asserted (they are outcomes)."""
+    """Structure only, values are never asserted (they are outcomes)."""
     model = init_model(0)  # untrained: structure is identical to the real protocol
     res = run_probes(model, synth_data_dir, device="cpu",
                      probe_types=("linear", "mlp2"), mlp_epochs=1, seed=0)

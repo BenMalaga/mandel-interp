@@ -1,7 +1,7 @@
 """Contract tests for ablations + activation patching: orthonormality, the algebra of
 the activation edits, pair-finding rules, and patching mechanics.
 
-NO research-outcome assertions — synthetic activations and untrained nets only.
+NO research-outcome assertions, synthetic activations and untrained nets only.
 """
 
 import numpy as np
@@ -108,7 +108,7 @@ def test_find_patch_pairs_empty_when_no_interior():
 
 def test_activation_patching_mechanics():
     """Full penultimate swap means the patched prediction equals the donor's
-    prediction — verified against a direct forward pass (mechanics, not outcomes)."""
+    prediction, verified against a direct forward pass (mechanics, not outcomes)."""
     model = init_model(0)
     X = np.random.default_rng(4).uniform(-2, 1, size=(4, 2)).astype(np.float32)
     with torch.no_grad():

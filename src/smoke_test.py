@@ -1,4 +1,4 @@
-"""End-to-end PLUMBING smoke test — explicitly NOT a research run.
+"""End-to-end PLUMBING smoke test, explicitly NOT a research run.
 
 Purpose: verify that the pipeline pieces fit together (tiny dataset slice -> brief
 training -> probes incl. both probe-power controls -> ablations + patching) without
@@ -64,7 +64,7 @@ def main() -> None:
     from .probes import run_probes
     from .train import init_model, load_model, train_one_seed
 
-    _say("PLUMBING TEST ONLY — outcome numbers are neither recorded nor reported.")
+    _say("PLUMBING TEST ONLY, outcome numbers are neither recorded nor reported.")
     with tempfile.TemporaryDirectory(prefix="mandel_smoke_") as td:
         tmp = Path(td)
         data_dir = tmp / "data"
@@ -102,7 +102,7 @@ def main() -> None:
         assert "n_pairs" in p, "patching results missing"
 
         # Results dicts go out of scope unread; the temp dir is deleted on exit.
-    _say("OK — full pipeline ran without error (plumbing only; no outcome numbers "
+    _say("OK, full pipeline ran without error (plumbing only; no outcome numbers "
          "recorded; all smoke artifacts deleted).")
 
 

@@ -1,6 +1,6 @@
 """Contract tests for the training harness: shapes, frozen config, checkpoint cadence.
 
-NO outcome assertions (no accuracy/loss/R² thresholds) — those are reserved for the
+NO outcome assertions (no accuracy/loss/R² thresholds), those are reserved for the
 pre-registered analysis. Training here happens only on tiny SYNTHETIC data (conftest)
 to exercise plumbing.
 """
@@ -41,7 +41,7 @@ def test_param_count_matches_prereg():
     # silently change capacity:
     assert n == 266_506
     # The pre-registered "≈3.0e5" is a one-significant-figure approximation of this
-    # count; assert we are in that ballpark (within 12% — the exact value above is
+    # count; assert we are in that ballpark (within 12%, the exact value above is
     # 11.2% below the rounded figure).
     assert abs(n - 3.0e5) / 3.0e5 < 0.12
 

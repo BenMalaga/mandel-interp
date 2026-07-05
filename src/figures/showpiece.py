@@ -218,8 +218,8 @@ def main():
             spine.set_edgecolor("#30363d")
 
     fig.suptitle(
-        "The ground-truth structure a tiny network is trained to classify "
-        "— we then probe whether it rediscovers $|\\lambda|$ internally",
+        "The ground-truth structure a tiny network is trained to classify, "
+        "then we probe whether it rediscovers $|\\lambda|$ internally",
         fontsize=13.5, y=1.005,
     )
     fig.tight_layout(rect=(0, 0, 1, 0.97))

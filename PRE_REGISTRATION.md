@@ -1,4 +1,4 @@
-# Pre-Registration — Mandel-Interp
+# Pre-Registration: Mandel-Interp
 
 **Locked:** 2026-06-11 (git commit timestamp is authoritative). No network has been trained
 and no probe/ablation has been run at lock time. The dataset is generated deterministically
@@ -18,7 +18,7 @@ side), or only a memorized boundary lookup? The claim is about the network, not 
 ground truth is exactly computable (`src/dynamics.py`, validated against analytically-known
 points), which is what enables clean causal interpretability.
 
-## 2. Data (computed, deterministic — `src/build_dataset.py`)
+## 2. Data (computed, deterministic; `src/build_dataset.py`)
 - Map z → z² + c; escape radius 2; `max_iter = 50000` for escape labels.
 - Period via cycle detection; multiplier λ = ∏ 2·zᵢ over the attracting cycle (|λ| is the
   internal coordinate, < 1 strictly inside, = 1 on the boundary); a detected repelling cycle
@@ -34,8 +34,8 @@ points), which is what enables clean causal interpretability.
 - Label cross-check: component centers validated against Zenodo record 10.5281/zenodo.15527027.
 
 ## 3. Models (frozen)
-- **Architecture:** MLP, input (Re c, Im c) **raw** (no Fourier/feature engineering — the point
-  is whether the net *builds* |λ| internally from coordinates), 4 hidden layers × width 256,
+- **Architecture:** MLP, input (Re c, Im c) **raw** (no Fourier/feature engineering, since the
+  point is whether the net *builds* |λ| internally from coordinates), 4 hidden layers × width 256,
   GELU activations, linear 10-way classification head. ≈3.0×10⁵ params.
 - **Training:** AdamW, lr 1e-3 with cosine decay, weight decay 1e-4, batch 1024, ≤300 epochs
   with early stop on val loss; PyTorch CPU/MPS. **Seeds {0,1,2,3,4}** (all reported).
@@ -74,7 +74,7 @@ and per-stratum accuracy (the boundary class is never silently dropped), the cau
 table, and the training-dynamics curves.
 
 ## 7. Prior art engaged
-arXiv:2509.00903 (fractal classification, accuracy-only — we add the interpretability it omits);
+arXiv:2509.00903 (fractal classification, accuracy-only, where we add the interpretability it omits);
 Nanda et al. "Progress measures for grokking" (ICLR 2023); Power et al. 2022; Zhong et al.
 "Clock and Pizza" 2023; Li et al. Othello-GPT world models (ICLR 2023); Hewitt & Liang 2019
 (probe-power baselines). Component-center reference: Vigneron & Mihalache (Zenodo 15527027).
@@ -82,7 +82,7 @@ Nanda et al. "Progress measures for grokking" (ICLR 2023); Power et al. 2022; Zh
 ## 8. Deviations
 None at lock. Amendments appear below this line, dated and labeled, never edited in place.
 
-**AMENDMENT 1 (2026-06-11, pre-training — clarification, no outcome data seen).** §3's
+**AMENDMENT 1 (2026-06-11, pre-training, clarification, no outcome data seen).** §3's
 architecture clause is ambiguous between MLP realizations: "4 hidden layers × width 256" with
 a separate input projection gives 266,506 params; folding the input layer into the four gives
 200,714; five weight matrices of width 256 give 332,298. No width-256 4-hidden-layer

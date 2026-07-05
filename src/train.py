@@ -1,7 +1,7 @@
 """Training harness for the period-classification MLP (PRE_REGISTRATION §3, frozen).
 
 Frozen specification implemented here:
-  - Input: raw (Re c, Im c) — no Fourier features or other feature engineering.
+  - Input: raw (Re c, Im c), no Fourier features or other feature engineering.
   - Architecture: input projection Linear(2, 256) + 4 hidden Linear(256, 256) layers,
     GELU after every hidden linear, linear 10-way classification head.
     Exact parameter count: 266,506 (the pre-registered figure "≈3.0e5" is a
@@ -197,11 +197,11 @@ def train_one_seed(seed: int, data_dir: str | Path, out_dir: str | Path,
                    shuffle_labels: bool = False,
                    verbose: bool = True) -> dict:
     """Train one seed. Returns a summary dict; writes to out_dir:
-      config.json   — full effective config + seed, written BEFORE training starts
-      step_*.pt     — checkpoints every `checkpoint_every` optimizer steps (incl. init)
-      best.pt       — best-val-loss model
-      final.pt      — model at stop time
-      history.json  — per-epoch train/val loss curves (run artifact, not committed)
+      config.json  = full effective config + seed, written BEFORE training starts
+      step_*.pt    = checkpoints every `checkpoint_every` optimizer steps (incl. init)
+      best.pt      = best-val-loss model
+      final.pt     = model at stop time
+      history.json = per-epoch train/val loss curves (run artifact, not committed)
     """
     out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)

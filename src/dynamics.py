@@ -9,7 +9,7 @@ Everything here is deterministic and reproducible. For a point c we compute:
             canonical internal coordinate (|lambda| < 1 strictly inside, = 1 on the boundary).
 
 These are the ground-truth targets the interpretability probes (PRE_REGISTRATION H1/H2/H3)
-will look for inside a trained network. No network here — labels only.
+will look for inside a trained network. No network here, labels only.
 """
 
 from __future__ import annotations

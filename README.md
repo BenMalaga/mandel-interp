@@ -18,14 +18,12 @@ interior cycle has, and the precise value of a hidden coordinate called the **mu
 modulus |λ|** that runs from 0 at a component's center to 1 at its boundary.
 
 That exactness is the whole point. Most interpretability research has to guess at what a
-network "should" represent. Here the ground truth is a theorem, not a hunch, so when we look
-inside a trained net and ask "is |λ| in here?", we can give a clean, causal answer. The result
-is interesting either way:
-
-- **If the network builds |λ|**, a tiny net rediscovered a piece of complex-dynamics theory
-  from nothing but coordinates and labels: a concrete "world model" on a continuous task.
-- **If it doesn't**, we have a crisp, publishable account of what small networks learn
-  *instead* (a boundary-memorizer) and why.
+network "should" represent. Here the ground truth is a theorem, not a hunch, so when I look
+inside a trained net and ask "is |λ| in here?", I can give a clean, causal answer. Either way
+the answer is worth having. If the network builds |λ|, then a tiny net rediscovered a piece of
+complex-dynamics theory from nothing but coordinates and labels, which is a concrete world model
+on a continuous task rather than the usual discrete-board setting. If it doesn't, I get a crisp
+account of what small networks learn instead, namely a boundary-memorizer, and why.
 
 ![Two-panel render of the Mandelbrot set: left, interior components colored by period; right, multiplier modulus inside and escape-time shading outside](docs/figures/mandelbrot_label_structure.png)
 
@@ -39,37 +37,38 @@ Both panels are computed exactly from the dynamics, not from any model.*
 
 ## How it works
 
-- **Exact labels, no dataset to download.** A small, validated dynamics core
-  (`src/dynamics.py`) computes period, |λ| (via Newton-refined cycles), and the escape-side
-  Green's function G(c) for any point. Labels are generated deterministically from a fixed seed.
-- **A deliberately plain network.** The MLP sees only the raw coordinates `(Re c, Im c)`, with
-  no Fourier features and no hand-engineered inputs, so any structure it represents it had to
-  *build* itself. The architecture is frozen in the pre-registration.
-- **Linear and nonlinear probes.** We fit probes for |λ|, G(c), and a control coordinate on
-  every hidden layer, and measure held-out R².
-- **Probe-power controls.** The same probes are run on an *untrained* net and on a net trained
-  on *shuffled* labels. A representation claim only counts if the trained net beats both, which
-  rules out "a probe can fit anything from rich-enough features."
-- **Causal tests, not just correlations.** We ablate the top probe directions and patch
-  activations between points at different |λ|, and check whether the network's predictions
-  actually depend on the structure we claim to have found.
+There is no dataset to download, because every label is computed. A validated dynamics core
+(`src/dynamics.py`) gives me the period, the multiplier modulus |λ| (via Newton-refined
+cycles), and the escape-side Green's function G(c) for any point c, all generated
+deterministically from a fixed seed. The network itself is deliberately plain: an MLP that
+sees only the raw coordinates `(Re c, Im c)`, with no Fourier features and nothing
+hand-engineered, so whatever structure it ends up representing it had to build on its own. The
+architecture is frozen in the pre-registration.
+
+To read that structure out, I fit probes for |λ|, G(c), and a control coordinate on every
+hidden layer and measure held-out R². The catch with any probing result is that a probe can fit
+almost anything given rich enough features, so the same probes are run on an untrained net and
+on a net trained with shuffled labels, and a representation claim only counts if the trained net
+beats both of those controls. Correlation isn't the finish line either: I ablate the top probe
+directions and patch activations between points at different |λ|, then check whether the
+network's predictions actually move when I disturb the structure I claim to have found.
 
 ---
 
 ## What makes it rigorous
 
-- **Pre-registered before training.** Every hypothesis, threshold, and probe protocol was
-  committed to [`PRE_REGISTRATION.md`](PRE_REGISTRATION.md) *before any network was trained*,
-  with a git timestamp. That is what makes a "the net encodes |λ|" claim credible rather than
-  a story fit after the fact.
-- **A clean null is a result.** The "boundary-memorizer" outcome is fully specified in advance
-  and reported with the same weight as a positive finding.
-- **Controls are load-bearing, not decorative.** Untrained-net and shuffled-label baselines are
-  required passes, not afterthoughts.
-- **Reproducible from scratch.** Labels are generated from a fixed seed; the dynamics core is
-  validated against analytically-known points; results run on a laptop CPU.
-- **Reported across five seeds**, with bootstrap confidence intervals, and no silently-dropped
-  classes (the hard boundary region is always shown).
+The whole design is pre-registered. Every hypothesis, threshold, and probe protocol went into
+[`PRE_REGISTRATION.md`](PRE_REGISTRATION.md) with a git timestamp before any network was
+trained, which is what keeps a "the net encodes |λ|" claim from being a story fit after the
+fact. The boundary-memorizer outcome is written up in advance too, and it carries the same
+weight as a positive finding, so a clean null is a real result here rather than a
+disappointment.
+
+The controls do actual work. The untrained-net and shuffled-label baselines are required
+passes, not decoration bolted on at the end. Everything reproduces from scratch on a laptop
+CPU: labels come from a fixed seed and the dynamics core is validated against points whose math
+is known analytically. Results are reported across five seeds with bootstrap confidence
+intervals, and the hard boundary region is always shown rather than quietly dropped.
 
 ---
 

@@ -7,17 +7,17 @@ For every hidden layer of a trained period-classification MLP we fit
 predicting three targets:
   - abs_lambda : |λ(c)|, the multiplier-map internal coordinate (interior points only),
   - green      : the Green's function G(c) (escape-side points only),
-  - dist_center: CONTROL target — Euclidean distance from c to the nearest
+  - dist_center: CONTROL target, Euclidean distance from c to the nearest
                  hyperbolic-component center of period ≤ 8 (defined for all points;
                  centers computed deterministically by Newton's method on the
                  critical-orbit polynomial P_p(c), the c with superattracting p-cycles).
 Metric: held-out R² on the test split (selection only ever touches val).
 
 Probe-power controls (PRE_REGISTRATION §4, load-bearing):
-  (a) UNTRAINED control — identical probes on a same-init untrained net
+  (a) UNTRAINED control, identical probes on a same-init untrained net
       (`--untrained --seed N` reproduces the init of training seed N exactly, because
       training uses the same seeded factory `src.train.init_model`).
-  (b) SHUFFLED-LABEL control — identical probes on a net trained with
+  (b) SHUFFLED-LABEL control, identical probes on a net trained with
       `python -m src.train --shuffle-labels` (point `--checkpoint` at that run).
 A representation claim (H1) requires the trained net to beat BOTH controls by the
 pre-registered margin.
@@ -51,7 +51,7 @@ CONTROL_MAX_PERIOD = 8  # centers of period <= 8, matching the labeled period cl
 
 
 # ---------------------------------------------------------------------------
-# Component centers (control target) — deterministic, no external data.
+# Component centers (control target), deterministic, no external data.
 # ---------------------------------------------------------------------------
 
 def critical_orbit_poly(c: np.ndarray, period: int) -> tuple[np.ndarray, np.ndarray]:
@@ -264,7 +264,7 @@ def run_probes(model: MLP, data_dir: str | Path, device: torch.device | str = "c
     """Fit all probes on all hidden layers and all targets. Returns the nested results
     dict {layer: {target: {probe_type: {.., 'test_r2': float}}}} (weights stripped).
 
-    `max_points` (logged when set) subsamples each split deterministically — used by
+    `max_points` (logged when set) subsamples each split deterministically, used by
     the plumbing smoke test only; the pre-registered analysis runs on the full splits.
     """
     splits = {}

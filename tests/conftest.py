@@ -1,6 +1,6 @@
 """Shared fixtures: tiny SYNTHETIC datasets for plumbing/contract tests.
 
-These rows are random placeholders in the generator's on-disk format — they carry no
+These rows are random placeholders in the generator's on-disk format, they carry no
 dynamics information and exist only so shape/config/contract tests never touch the
 real (gated) dataset build or assert anything about research outcomes.
 """
