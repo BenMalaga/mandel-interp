@@ -1,9 +1,9 @@
-# Internal working docs — NEVER published
+# Internal working docs, NEVER published
 _internal/
 CLAUDE.md
 PRE_REGISTRATION_DRAFT.md
 
-# Data / models — fetched or generated, never committed (except small released artifacts in results/)
+# Data / models: fetched or generated, never committed (except small released artifacts in results/)
 data/*
 !data/README.md
 checkpoints/
